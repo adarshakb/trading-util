@@ -27,4 +27,4 @@ def getBBANDSForAll(column='Close', timeperiod=20, nbdevup=2, nbdevdn=2, matype=
     return result
 
 
-print(getBBANDSForAll())
+# print(getBBANDSForAll())
