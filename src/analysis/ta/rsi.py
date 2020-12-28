@@ -1,10 +1,10 @@
 import pandas
-import talib as ta
+import talib
 
 
 def getRSI(ticker, column='Close', timeperiod=14):
     df = pandas.read_csv("../../../resources/tickerList/" + ticker + "/history.csv")
-    return ta.RSI(df[column].values, timeperiod)
+    return talib.RSI(df[column].values, timeperiod)
 
 
 def getRSIForAll(column='Close', timeperiod=14):
@@ -18,4 +18,4 @@ def getRSIForAll(column='Close', timeperiod=14):
     return result
 
 
-getRSIForAll()
+# print(getRSIForAll())
