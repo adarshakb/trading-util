@@ -2,7 +2,7 @@ import pandas
 import talib
 
 
-def getBBANDS(ticker, column='Close', timeperiod=14, nbdevup=2, nbdevdn=2, matype=0):
+def getBBANDS(ticker, column='Close', timeperiod=20, nbdevup=2, nbdevdn=2, matype=0):
     """
     :param ticker: the market ticker
     :param column: Column in the data frame csv
@@ -16,7 +16,7 @@ def getBBANDS(ticker, column='Close', timeperiod=14, nbdevup=2, nbdevdn=2, matyp
     return talib.BBANDS(df['Close'].values, timeperiod, nbdevup, nbdevdn, matype)
 
 
-def getBBANDSForAll(column='Close', timeperiod=14, nbdevup=2, nbdevdn=2, matype=0):
+def getBBANDSForAll(column='Close', timeperiod=20, nbdevup=2, nbdevdn=2, matype=0):
     result = []
     df = pandas.read_csv("../../../resources/tickerList/NASDAQ-100-Stock-Tickers-List.csv")
     for index, row in df.iterrows():
@@ -24,8 +24,7 @@ def getBBANDSForAll(column='Close', timeperiod=14, nbdevup=2, nbdevdn=2, matype=
         result.append({
             company: getBBANDS(company, column, timeperiod, nbdevup, nbdevdn, matype)
         })
-        break
     return result
 
 
-# print(getBBANDSForAll()[0]['atvi'])
+print(getBBANDSForAll())
