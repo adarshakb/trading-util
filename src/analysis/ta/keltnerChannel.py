@@ -18,11 +18,11 @@ class KeltnerChannel():
 
     def getKeltnerChannel(self):
         """
-        :return: lower band, middle band, upper band
+        :return: upper band, middle band, lower band
         """
         ema = talib.EMA(self.df[self.column].values, self.timeperiod)
         atr = talib.ATR(self.df['High'].values, self.df['Low'].values, self.df['Close'].values, self.timeperiod)
-        return ema - (self.atrMultiple * atr), ema, ema + (self.atrMultiple * atr)
+        return ema + (self.atrMultiple * atr), ema, ema - (self.atrMultiple * atr)
 
     def getKeltnerChannelForAll(self):
         result = []
