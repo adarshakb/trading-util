@@ -14,7 +14,7 @@ class KeltnerChannel():
         self.column = column
         self.timeperiod = timeperiod
         self.atrMultiple = atrMultiple
-        self.df = pandas.read_csv("../../../resources/tickerList/" + ticker + "/history.csv")
+        self.df = pandas.read_csv("../../../resources/tickerList/" + ticker + "/history.csv", float_precision="round_trip")
 
     def getKeltnerChannel(self):
         """
