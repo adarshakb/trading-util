@@ -72,5 +72,5 @@ class KeltnerChannel():
 
 # print(KeltnerChannel('aapl').getKeltnerChannel())
 
-for signal in KeltnerChannel('aapl').getSignals():
-    print(signal)
+# for signal in KeltnerChannel('aapl').getSignals():
+#     print(signal)
