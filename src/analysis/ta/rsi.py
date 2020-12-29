@@ -28,6 +28,12 @@ class RSI():
         return result
 
     def getSignals(self, low=30, high=70):
+        """
+        generate signal when RSI is above given low and high values
+        :param low:
+        :param high:
+        :return:
+        """
         rsiSignals = self.getRSI()
         indexs = numpy.argwhere(numpy.logical_or(rsiSignals < low, rsiSignals > high))
         for index in indexs:
