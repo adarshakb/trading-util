@@ -1,8 +1,9 @@
-import pandas
 import yfinance as yf
 import os
 
-df = pandas.read_csv("../../resources/tickerList/NASDAQ-100-Stock-Tickers-List.csv")
+from src.dataUtils.PriceDataUtil import PriceData
+
+df = PriceData.get_all_tickers()
 
 for index, row in df.iterrows():
     company = yf.Ticker(row['Ticker'])

@@ -2,6 +2,9 @@ import pandas
 import talib
 import numpy
 
+from src.dataUtils.PriceDataUtil import PriceData
+
+
 class KeltnerChannel():
     def __init__(self, ticker, column='Close', timeperiod=20, atrMultiple=2):
         """
@@ -14,7 +17,7 @@ class KeltnerChannel():
         self.column = column
         self.timeperiod = timeperiod
         self.atrMultiple = atrMultiple
-        self.df = pandas.read_csv("../../../resources/tickerList/" + ticker + "/history.csv", float_precision="round_trip")
+        self.df = PriceData.get_price_data(ticker=ticker)
 
     def getKeltnerChannel(self):
         """
@@ -26,7 +29,7 @@ class KeltnerChannel():
 
     def getKeltnerChannelForAll(self):
         result = []
-        df = pandas.read_csv("../../../resources/tickerList/NASDAQ-100-Stock-Tickers-List.csv")
+        df = PriceData.get_all_tickers()
         for index, row in df.iterrows():
             company = row['Ticker']
             result.append({

@@ -2,13 +2,15 @@ import pandas
 import talib
 import numpy
 
+from src.dataUtils.PriceDataUtil import PriceData
+
 
 class RSI():
     def __init__(self, ticker, column='Close', timeperiod=14):
         self.ticker = ticker
         self.column = column
         self.timeperiod = timeperiod
-        self.df = pandas.read_csv("../../../resources/tickerList/" + ticker + "/history.csv", float_precision="round_trip")
+        self.df = PriceData.get_price_data(ticker=ticker)
 
     def getRSI(self):
         """
@@ -19,7 +21,7 @@ class RSI():
 
     def getRSIForAll(self):
         result = []
-        companiesList = pandas.read_csv("../../../resources/tickerList/NASDAQ-100-Stock-Tickers-List.csv")
+        companiesList = PriceData.get_all_tickers()
         for index, row in companiesList.iterrows():
             company = row['Ticker']
             result.append({

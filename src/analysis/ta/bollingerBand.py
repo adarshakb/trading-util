@@ -3,6 +3,7 @@ import talib
 import numpy
 from src.analysis.ta import keltnerChannel
 from src.analysis.ta.keltnerChannel import KeltnerChannel
+from src.dataUtils.PriceDataUtil import PriceData
 
 
 class BolingerBand():
@@ -21,18 +22,29 @@ class BolingerBand():
         self.nbdevup = nbdevup
         self.nbdevdn = nbdevdn
         self.matype = matype
-        self.df = pandas.read_csv("../../../resources/tickerList/" + ticker + "/history.csv", float_precision="round_trip")
+        self.df = PriceData.get_price_data(ticker=ticker)
+        self.upperBand = None
+        self.middleBand = None
+        self.lowerBand = None
 
     def getBBANDS(self):
         """
         :return: upper, middle, lower bands
         """
-        return talib.BBANDS(self.df[self.column].values, timeperiod=self.timeperiod, nbdevup=self.nbdevup,
-                            nbdevdn=self.nbdevdn, matype=self.matype)
+
+        if self.upperBand is None:
+            upper, middle, lower = talib.BBANDS(self.df[self.column].values, timeperiod=self.timeperiod,
+                                                nbdevup=self.nbdevup,
+                                                nbdevdn=self.nbdevdn, matype=self.matype)
+            self.upperBand = upper
+            self.middleBand = middle
+            self.lowerBand = lower
+
+        return self.upperBand, self.middleBand, self.lowerBand
 
     def getBBANDSForAll(self):
         result = []
-        companiesList = pandas.read_csv("../../../resources/tickerList/NASDAQ-100-Stock-Tickers-List.csv")
+        companiesList = PriceData.get_all_tickers()
         for index, row in companiesList.iterrows():
             company = row['Ticker']
             result.append({
@@ -40,7 +52,7 @@ class BolingerBand():
             })
         return result
 
-    def getSignals(self, keltnerChannel: KeltnerChannel):
+    def getSignals(self, keltnerChannel: KeltnerChannel = None):
         """
 
         generate signals when stock price is above upper band or below lower bands
@@ -61,7 +73,8 @@ class BolingerBand():
             if idx[0] >= self.timeperiod - 1:
                 # print(idx[0], price, upperBand[idx], middleBand[idx], lowerBand[idx])
                 if ((keltnerChannel is None and price > upperBand[idx]) or
-                        (keltnerChannel is not None and price > upperBand[idx] > keltnerUpperBand[idx])): #verify if this right
+                        (keltnerChannel is not None and price > upperBand[idx] > keltnerUpperBand[
+                            idx])):  # verify if this right
                     yield {
                         'index': idx[0],
                         'type': 'CROSS_UPPER_BAND',
@@ -75,7 +88,8 @@ class BolingerBand():
                         'history': self.df.iloc[idx[0]].values.tolist()
                     }
                 if ((keltnerChannel is None and price < lowerBand[idx]) or
-                        (keltnerChannel is not None and price < lowerBand[idx] < keltnerLowerBand[idx])): #verify if this right
+                        (keltnerChannel is not None and price < lowerBand[idx] < keltnerLowerBand[
+                            idx])):  # verify if this right
                     yield {
                         'index': idx[0],
                         'type': 'CROSS_LOWER_BAND',
