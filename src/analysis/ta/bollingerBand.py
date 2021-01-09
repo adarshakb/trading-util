@@ -3,6 +3,7 @@ import talib
 import numpy
 from src.analysis.ta import keltnerChannel
 from src.analysis.ta.keltnerChannel import KeltnerChannel
+from src.analysis.ta.rsi import RSI
 from src.dataUtils.PriceDataUtil import PriceData
 
 
@@ -52,7 +53,29 @@ class BolingerBand():
             })
         return result
 
-    def getSignals(self, keltnerChannel: KeltnerChannel = None):
+    def compare_greter_than(self, idx, price, upperBand, keltnerUpperBand, rsi_indicator: RSI, rsi):
+        if keltnerUpperBand is not None:
+            if price <= keltnerUpperBand[idx]:
+                return False
+        if rsi_indicator is not None:
+            if rsi[idx] <= rsi_indicator.high:
+                return False
+        if price <= upperBand[idx]:
+            return False
+        return True
+
+    def compare_less_than(self, idx, price, lowerBand, keltnerLowerBand, rsi_indicator: RSI, rsi):
+        if keltnerLowerBand is not None:
+            if price >= keltnerLowerBand[idx]:
+                return False
+        if rsi_indicator is not None:
+            if rsi[idx] >= rsi_indicator.low:
+                return False
+        if price >= lowerBand[idx]:
+            return False
+        return True
+
+    def getSignals(self, keltnerChannel: KeltnerChannel = None, rsi_indicator: RSI = None):
         """
 
         generate signals when stock price is above upper band or below lower bands
@@ -69,12 +92,14 @@ class BolingerBand():
         if keltnerChannel:
             keltnerUpperBand, keltnerrMiddleBand, keltnerLowerBand = keltnerChannel.getKeltnerChannel()
 
+        rsi = None
+        if rsi_indicator:
+            rsi = rsi_indicator.getRSI()
+
         for idx, price in numpy.ndenumerate(columnPrices):
             if idx[0] >= self.timeperiod - 1:
                 # print(idx[0], price, upperBand[idx], middleBand[idx], lowerBand[idx])
-                if ((keltnerChannel is None and price > upperBand[idx]) or
-                        (keltnerChannel is not None and price > upperBand[idx] > keltnerUpperBand[
-                            idx])):  # verify if this right
+                if self.compare_greter_than(idx, price, upperBand, keltnerUpperBand, rsi_indicator, rsi):
                     yield {
                         'index': idx[0],
                         'type': 'CROSS_UPPER_BAND',
@@ -87,9 +112,7 @@ class BolingerBand():
                         'keltnerLowerBand': (keltnerLowerBand[idx] if keltnerChannel is not None else None),
                         'history': self.df.iloc[idx[0]].values.tolist()
                     }
-                if ((keltnerChannel is None and price < lowerBand[idx]) or
-                        (keltnerChannel is not None and price < lowerBand[idx] < keltnerLowerBand[
-                            idx])):  # verify if this right
+                if self.compare_less_than(idx, price, lowerBand, keltnerLowerBand, rsi_indicator, rsi):  # verify if this right
                     yield {
                         'index': idx[0],
                         'type': 'CROSS_LOWER_BAND',
@@ -102,6 +125,6 @@ class BolingerBand():
                         'keltnerLowerBand': (keltnerLowerBand[idx] if keltnerChannel is not None else None),
                         'history': self.df.iloc[idx[0]].values.tolist()
                     }
-#
-# for signal in BolingerBand('aapl').getSignals(keltnerChannel=KeltnerChannel('aapl')):
-#     print(signal)
+
+for signal in BolingerBand('aapl').getSignals(keltnerChannel=KeltnerChannel('aapl')):
+    print(signal)
