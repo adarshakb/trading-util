@@ -19,6 +19,9 @@ class KeltnerChannel():
         self.atrMultiple = atrMultiple
         self.df = PriceData.get_price_data(ticker=ticker)
 
+    def getName(self):
+        return "KeltnerChannel"
+
     def getKeltnerChannel(self):
         """
         :return: upper band, middle band, lower band

@@ -28,6 +28,9 @@ class BolingerBand():
         self.middleBand = None
         self.lowerBand = None
 
+    def getName(self):
+        return "BolingerBand"
+
     def getBBANDS(self):
         """
         :return: upper, middle, lower bands
@@ -110,6 +113,7 @@ class BolingerBand():
                         'keltnerUpperBand': (keltnerUpperBand[idx] if keltnerChannel is not None else None),
                         'keltnerrMiddleBand': (keltnerrMiddleBand[idx] if keltnerChannel is not None else None),
                         'keltnerLowerBand': (keltnerLowerBand[idx] if keltnerChannel is not None else None),
+                        'rsi' : (rsi[idx] if rsi_indicator is not None else None),
                         'history': self.df.iloc[idx[0]].values.tolist()
                     }
                 if self.compare_less_than(idx, price, lowerBand, keltnerLowerBand, rsi_indicator, rsi):  # verify if this right
@@ -123,8 +127,9 @@ class BolingerBand():
                         'keltnerUpperBand': (keltnerUpperBand[idx] if keltnerChannel is not None else None),
                         'keltnerrMiddleBand': (keltnerrMiddleBand[idx] if keltnerChannel is not None else None),
                         'keltnerLowerBand': (keltnerLowerBand[idx] if keltnerChannel is not None else None),
+                        'rsi' : (rsi[idx] if rsi_indicator is not None else None),
                         'history': self.df.iloc[idx[0]].values.tolist()
                     }
 
-for signal in BolingerBand('aapl').getSignals(keltnerChannel=KeltnerChannel('aapl')):
-    print(signal)
+# for signal in BolingerBand('aapl').getSignals(keltnerChannel=None, rsi_indicator=RSI('aapl')):
+#     print(signal)

@@ -12,7 +12,7 @@ class PriceData:
         if ticker in cls.price_date_cache:
             return cls.price_date_cache[ticker]
 
-        df = pandas.read_csv("../../../resources/tickerList/" + ticker + "/history.csv",
+        df = pandas.read_csv("../../resources/tickerList/" + ticker + "/history.csv",
                                float_precision="round_trip")
         df['Date'] = pandas.to_datetime(df['Date'])
 
@@ -21,5 +21,5 @@ class PriceData:
 
     @staticmethod
     def get_all_tickers():
-        df = pandas.read_csv("../../../resources/tickerList/NASDAQ-100-Stock-Tickers-List.csv")
+        df = pandas.read_csv("../../resources/tickerList/NASDAQ-100-Stock-Tickers-List.csv")
         return df

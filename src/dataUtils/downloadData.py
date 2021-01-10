@@ -8,9 +8,9 @@ df = PriceData.get_all_tickers()
 for index, row in df.iterrows():
     company = yf.Ticker(row['Ticker'])
     print(row)
-    outputDirectory = "../../resources/tickerList/" + row['Ticker']
+    outputDirectory = "../../../resources/tickerList/" + row['Ticker']
     if not os.path.exists(outputDirectory):
-        os.mkdir(outputDirectory)
+        os.makedirs(outputDirectory)
     company.history(period="max").to_csv(outputDirectory + "/history.csv");
     company.actions.to_csv(outputDirectory + "/actions.csv");
     company.dividends.to_csv(outputDirectory + "/dividends.csv");

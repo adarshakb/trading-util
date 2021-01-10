@@ -1,5 +1,6 @@
 .idea/*
 resources/tickerList/*
+resources/trades/*
 !resources/tickerList/NASDAQ-100-Stock-Tickers-List.csv
 .DS_Store
 *.iml

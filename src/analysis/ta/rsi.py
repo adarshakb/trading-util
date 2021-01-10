@@ -19,7 +19,12 @@ class RSI():
 
         :return: numpy.ndarray
         """
-        return talib.RSI(self.df[self.column].values, self.timeperiod)
+        rsi = talib.RSI(self.df[self.column].values, self.timeperiod)
+        # print(rsi)
+        return rsi
+
+    def getName(self):
+        return "RSI"
 
     def getRSIForAll(self):
         result = []
@@ -56,7 +61,7 @@ class RSI():
                     'history' : self.df.iloc[index[0]].values.tolist()
                 }
 
-
+# print(RSI(ticker='aapl').getRSI())
 # print(RSI(ticker='aapl').getSignals())
 #
 # for signal in RSI(ticker='aapl').getSignals():
