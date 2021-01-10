@@ -8,7 +8,7 @@ from src.dataUtils.PriceDataUtil import PriceData
 
 
 class BolingerBand():
-    def __init__(self, ticker, column='Close', timeperiod=20, nbdevup=2, nbdevdn=2, matype=0):
+    def __init__(self, ticker, column='Close', timeperiod=20, nbdevup=2, nbdevdn=2, matype=0, start_time=None, end_time=None):
         """
         :param ticker: the market ticker
         :param column: Column in the data frame csv
@@ -23,10 +23,12 @@ class BolingerBand():
         self.nbdevup = nbdevup
         self.nbdevdn = nbdevdn
         self.matype = matype
-        self.df = PriceData.get_price_data(ticker=ticker)
+        self.df = PriceData.get_price_data(ticker=ticker, start_time=start_time, end_time=end_time)
         self.upperBand = None
         self.middleBand = None
         self.lowerBand = None
+        self.start_time = start_time
+        self.end_time = end_time
 
     def getName(self):
         return "BolingerBand"

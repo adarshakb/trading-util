@@ -28,19 +28,19 @@ class BandStrategy():
         self.strategyband = None
         self.strategyArgs = {}
         if strategy_type is StrategyTypes.KELTNER:
-            self.strategyband = KeltnerChannel(ticker=self.ticker)
+            self.strategyband = KeltnerChannel(ticker=self.ticker, start_time=start_time, end_time=end_time)
         if strategy_type is StrategyTypes.BOLINGER:
-            self.strategyband = BolingerBand(ticker=self.ticker)
+            self.strategyband = BolingerBand(ticker=self.ticker, start_time=start_time, end_time=end_time)
         if strategy_type is StrategyTypes.BOLINGER_KELTNER:
-            self.strategyband = BolingerBand(ticker=self.ticker)
-            self.strategyArgs = {'keltnerChannel': KeltnerChannel(ticker=self.ticker)}
+            self.strategyband = BolingerBand(ticker=self.ticker, start_time=start_time, end_time=end_time)
+            self.strategyArgs['keltnerChannel'] = KeltnerChannel(ticker=self.ticker, start_time=start_time, end_time=end_time)
         if strategy_type is StrategyTypes.BOLINGER_RSI:
-            self.strategyband = BolingerBand(ticker=self.ticker)
-            self.strategyArgs = {'rsi_indicator': RSI(ticker=self.ticker)}
+            self.strategyband = BolingerBand(ticker=self.ticker, start_time=start_time, end_time=end_time)
+            self.strategyArgs['rsi_indicator'] = RSI(ticker=self.ticker, start_time=start_time, end_time=end_time)
         if strategy_type is StrategyTypes.BOLINGER_KELTNER_RSI:
-            self.strategyband = BolingerBand(ticker=self.ticker)
-            self.strategyArgs = {'keltnerChannel': KeltnerChannel(ticker=self.ticker),
-                                 'rsi_indicator': RSI(ticker=self.ticker)}
+            self.strategyband = BolingerBand(ticker=self.ticker, start_time=start_time, end_time=end_time)
+            self.strategyArgs['keltnerChannel'] = KeltnerChannel(ticker=self.ticker, start_time=start_time, end_time=end_time)
+            self.strategyArgs['rsi_indicator'] = RSI(ticker=self.ticker, start_time=start_time, end_time=end_time)
 
     def to_dict(self):
         return {

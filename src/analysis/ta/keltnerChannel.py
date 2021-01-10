@@ -6,7 +6,7 @@ from src.dataUtils.PriceDataUtil import PriceData
 
 
 class KeltnerChannel():
-    def __init__(self, ticker, column='Close', timeperiod=20, atrMultiple=2):
+    def __init__(self, ticker, column='Close', timeperiod=20, atrMultiple=2, start_time=None, end_time=None):
         """
         Keltner channel https://www.investopedia.com/terms/k/keltnerchannel.asp
         :param ticker: the market ticker
@@ -17,7 +17,7 @@ class KeltnerChannel():
         self.column = column
         self.timeperiod = timeperiod
         self.atrMultiple = atrMultiple
-        self.df = PriceData.get_price_data(ticker=ticker)
+        self.df = PriceData.get_price_data(ticker=ticker, start_time=start_time, end_time=end_time)
 
     def getName(self):
         return "KeltnerChannel"

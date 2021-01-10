@@ -3,15 +3,13 @@ import os
 import pandas
 
 from src.analysis.trade.trade import TradeTypes
+from src.dataUtils.PriceDataUtil import PriceColumnFormats
 
 
 class TradesDataUtil:
-    trades_data_cache = {}
 
-    @classmethod
-    def read_trades_data(cls, strategy):
-        if strategy.ticker in cls.trades_data_cache:
-            return cls.trades_data_cache[strategy.ticker]
+    @staticmethod
+    def read_trades_data(strategy):
 
         trades_resource_path = TradesDataUtil.get_trades_resource_path(strategy) + 'trades.csv'
 
@@ -20,8 +18,7 @@ class TradesDataUtil:
                              float_precision="round_trip")
         df['entry_time'] = pandas.to_datetime(df['entry_time'])
 
-        cls.trades_data_cache[strategy.ticker] = df
-        return cls.trades_data_cache[strategy.ticker]
+        return df
 
     @staticmethod
     def save_trades_data(strategy, trades_df):
@@ -38,12 +35,39 @@ class TradesDataUtil:
         analysys_df.to_csv(trades_resource_path + 'analysys.csv')
 
     @staticmethod
+    def save_ticker_analysys_data(ticker, analysys_df):
+        trades_resource_path = TradesDataUtil.get_ticker_level_resource_path(ticker)
+        if not os.path.exists(trades_resource_path):
+            os.makedirs(trades_resource_path)
+        analysys_df.to_csv(trades_resource_path + 'analysys.csv')
+
+    @staticmethod
+    def save_all_combined_analysys_data(analysys_df):
+        trades_resource_path = TradesDataUtil.get_resource_path()
+        if not os.path.exists(trades_resource_path):
+            os.makedirs(trades_resource_path)
+        analysys_df.to_csv(trades_resource_path + 'analysys.csv')
+
+    @staticmethod
     def get_trades_resource_path(strategy):
         info = strategy.to_dict()
-        trades_resource_path = "../../resources/trades/ticker/" + info['ticker'] + "/" + info[
+        trades_resource_path = TradesDataUtil.get_ticker_level_resource_path(info['ticker']) + info[
             'strategy_type'].value + "/" + str(info['trade_time_in_days']) + "/"
         if strategy.start_time is None and strategy.end_time is None:
             trades_resource_path += "ALL/"
         else:
-            trades_resource_path += strategy.start_time + "_to_" + strategy.end_time
+            if strategy.start_time is not None:
+                trades_resource_path += strategy.start_time.strftime(PriceColumnFormats.DATE_FORMAT)
+            trades_resource_path += "_to_"
+            if strategy.end_time is not None:
+                trades_resource_path += strategy.end_time.strftime(PriceColumnFormats.DATE_FORMAT)
+            trades_resource_path += "/"
         return trades_resource_path
+
+    @staticmethod
+    def get_ticker_level_resource_path(ticker):
+        return TradesDataUtil.get_resource_path() + ticker + "/"
+
+    @staticmethod
+    def get_resource_path():
+        return "../../resources/trades/ticker/"

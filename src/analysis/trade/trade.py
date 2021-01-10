@@ -51,7 +51,7 @@ class Trade:
 
 
 class TradeUtil:
-    def convert_trades(self, trades_list, column='Close'):
+    def convert_trades(self, trades_list, column='Close', start_time=None, end_time=None):
         """
         Convert the PUTs and CALLs to BUYs and SELLs
         :param trades_list:
@@ -68,7 +68,7 @@ class TradeUtil:
                 continue
 
             if trade.ticker not in df:
-                df[trade.ticker] = PriceData.get_price_data(ticker=trade.ticker)
+                df[trade.ticker] = PriceData.get_price_data(ticker=trade.ticker, start_time=start_time, end_time=end_time)
             ticker_data = df[trade.ticker]
             # print(trade.ticker, trade.trade_type, trade.entry_time, trade.exit_time, trade.target_execution_price, trade.stop_loss)
             ticker_data_filtered_date = ticker_data[numpy.logical_and(ticker_data['Date'] >= trade.entry_time, ticker_data['Date'] <= trade.exit_time)]
@@ -160,7 +160,7 @@ class TradeUtil:
         return pandas.DataFrame.from_records([t.to_dict() for t in trades_list])
 
     @staticmethod
-    def get_analysis_from_trades(trades_list, start_date=None, end_date=None):
+    def get_analysis_from_trades(trades_list):
         money = 0
         prev_trade_type = None
         prev_trade_value = None
@@ -168,6 +168,7 @@ class TradeUtil:
         no_profitable_trade = 0
         start_date = None
         total_num_time_in_trade = datetime.timedelta(0)
+        # print(len(trades_list.index))
         for index, row in trades_list.iterrows():
             if start_date is None:
                 start_date = row['entry_time']

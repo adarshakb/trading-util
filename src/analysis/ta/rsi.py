@@ -6,13 +6,13 @@ from src.dataUtils.PriceDataUtil import PriceData
 
 
 class RSI():
-    def __init__(self, ticker, column='Close', timeperiod=14, low=30, high=70):
+    def __init__(self, ticker, column='Close', timeperiod=14, low=30, high=70, start_time=None, end_time=None):
         self.ticker = ticker
         self.column = column
         self.timeperiod = timeperiod
         self.low = low
         self.high = high
-        self.df = PriceData.get_price_data(ticker=ticker)
+        self.df = PriceData.get_price_data(ticker=ticker, start_time=start_time, end_time=end_time)
 
     def getRSI(self):
         """
