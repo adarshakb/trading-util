@@ -25,12 +25,12 @@ class Trade:
         self.actual_execution_price = actual_execution_price
         self.actual_execution_ticker_data = actual_execution_ticker_data
         if self.actual_execution_ticker_data is not None:
-            assert len(actual_execution_ticker_data.index) is 1
+            assert len(actual_execution_ticker_data.index) == 1
 
     def adjust_exit_time_based_on_market_holidays(self):
         df = PriceData.get_price_data(ticker=self.ticker)
         max_date = df['Date'].max()
-        while df[numpy.equal(df['Date'], self.exit_time)].shape[0] is 0:
+        while df[numpy.equal(df['Date'], self.exit_time)].shape[0] == 0:
             self.exit_time = self.exit_time + datetime.timedelta(days=1)
             if self.exit_time > max_date:
                 return False
