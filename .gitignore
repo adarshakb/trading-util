@@ -1,6 +1,18 @@
-.idea/*
+.idea/
+.DS_Store
+*.iml
+
+# Python cache/build artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Generated project data
 resources/tickerList/*
 resources/trades/*
 !resources/tickerList/NASDAQ-100-Stock-Tickers-List.csv
-.DS_Store
-*.iml
