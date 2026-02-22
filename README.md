@@ -38,6 +38,12 @@ python -m src.dataUtils.downloadData
 python -m src.analysis.analysis
 ```
 
+5. Run unit tests:
+
+```bash
+python -m unittest discover -s tests -p 'test_*.py'
+```
+
 ## Project layout
 - `src/dataUtils/downloadData.py` — downloads and stores market data
 - `src/dataUtils/PriceDataUtil.py` — loads ticker/history data
